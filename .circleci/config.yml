@@ -1,78 +1,64 @@
-version: 2.1 # Use 2.1 to enable using orbs and other features.
-
-# Declare the orbs that we'll use in our config.
-# read more about orbs: https://circleci.com/docs/2.0/using-orbs/
-orbs:
-  ruby: circleci/ruby@1.0
-  node: circleci/node@2
-
+version: 2.1
 jobs:
-  build: # our first job, named "build"
+  build:
+    working_directory: ~/my-app
     docker:
-      - image: cimg/ruby:2.6.4 # use a tailored CircleCI docker image.
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-    steps:
-      - checkout # pull down our git code.
-      - ruby/install-deps # use the ruby orb to install dependencies
-      # use the node orb to install our packages
-      # specifying that we use `yarn` and to cache dependencies with `yarn.lock`
-      # learn more: https://circleci.com/docs/2.0/caching/
-      - node/install-packages:
-          pkg-manager: yarn
-          cache-key: "yarn.lock"
-
-  test:  # our next job, called "test"
-    # we run "parallel job containers" to enable speeding up our tests;
-    # this splits our tests across multiple containers.
-    parallelism: 3
-    # here we set TWO docker images.
-    docker:
-      - image: cimg/ruby:2.6.4 # this is our primary docker image, where step commands run.
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-      - image: circleci/postgres:9.5-alpine
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-        environment: # add POSTGRES environment variables.
-          POSTGRES_USER: circleci-demo-ruby
-          POSTGRES_DB: rails_blog_test
-          POSTGRES_PASSWORD: ""
-    # environment variables specific to Ruby/Rails, applied to the primary container.
-    environment:
-      BUNDLE_JOBS: "3"
-      BUNDLE_RETRY: "3"
-      PGHOST: 127.0.0.1
-      PGUSER: circleci-demo-ruby
-      PGPASSWORD: ""
-      RAILS_ENV: test
-    # A series of steps to run, some are similar to those in "build".
+      - image: circleci/ruby:2.6.4-node
+        environment:
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          DATABASE_URL: postgres://postgres:password@localhost:5432/swimming_pools_test
+          RAILS_ENV: test
+          REDIS_URL: redis://127.0.0.1:6379
+      - image: circleci/postgres:11-alpine
+      - image: circleci/redis:3.2-alpine
     steps:
       - checkout
-      - ruby/install-deps
-      - node/install-packages:
-          pkg-manager: yarn
-          cache-key: "yarn.lock"
-      # Here we make sure that the secondary container boots
-      # up before we run operations on the database.
+
+      # Install dependencies for Ruby Gems
+      - restore_cache:
+          keys:
+            - my-app-bundle-v1-{{ checksum "Gemfile.lock" }}
+            - my-app-bundle-v1-
+
+      - run:
+          name: Configure Bundler
+          command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
+
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install
+
+      - save_cache:
+          key: my-app-bundle-v1-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      # Preparing database
       - run:
           name: Wait for DB
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+          command: dockerize -wait tcp://127.0.0.1:5432 -timeout 1m
+
       - run:
           name: Database setup
-          command: bundle exec rails db:schema:load --trace
-      # Run rspec in parallel
-      - ruby/rspec-test
+          command: bin/rails db:create db:schema:load --trace
 
-# We use workflows to orchestrate the jobs that we declared above.
-workflows:
-  version: 2
-  build_and_test:     # The name of our workflow is "build_and_test"
-    jobs:             # The list of jobs we run as part of this workflow.
-      - build         # Run build first.
-      - test:         # Then run test,
-          requires:   # Test requires that build passes for it to run.
-            - build   # Finally, run the build job.
+      # Run test suits
+      # - run:
+          # name: Run rubocop in parallel
+          # command: bundle exec rubocop --parallel --config .rubocop.yml
+
+      - run:
+          name: Run rspec in parallel
+          command: |
+            bundle exec rspec --profile 10 \
+                             --out /tmp/test-results/rspec.xml \
+                             --format progress \
+                             $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+
+      # Save artifacts
+      - store_test_results:
+          path: /tmp/test-results
