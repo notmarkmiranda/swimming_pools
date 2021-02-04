@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/my-app
     docker:
-      - image: circleci/ruby:2.6.4-node
+      - image: circleci/ruby:2.7.2-node
         environment:
           BUNDLE_RETRY: 3
           BUNDLE_PATH: vendor/bundle
@@ -53,11 +53,7 @@ jobs:
 
       - run:
           name: Run rspec in parallel
-          command: |
-            bundle exec rspec --profile 10 \
-                             --out /tmp/test-results/rspec.xml \
-                             --format progress \
-                             $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+          command: bundle exec rspec
 
       # Save artifacts
       - store_test_results:
