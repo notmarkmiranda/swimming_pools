@@ -13,7 +13,7 @@ SimpleCov.start('rails') do
   add_filter 'jobs'
   add_filter 'mailers'
 end
-puts 'required simplecov'
+puts '[REQUIRED SIMPLECOV]'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -72,4 +72,11 @@ RSpec.configure do |config|
 
   # FactoryBot
   config.include FactoryBot::Syntax::Methods
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
 end
