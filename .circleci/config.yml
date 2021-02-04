@@ -36,6 +36,11 @@ jobs:
           key: my-app-bundle-v1-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
+      # precompile
+      - run: nvm install node
+      - run:
+          name: Precompile assets
+          command: NODE_ENV=test bundle exec rails webpacker:compile
 
       # Preparing database
       - run:
