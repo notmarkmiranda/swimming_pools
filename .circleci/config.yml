@@ -1,65 +1,55 @@
-version: 2.1
 jobs:
   build:
-    working_directory: ~/my-app
     docker:
-      - image: circleci/ruby:2.7.2-node
-        environment:
-          BUNDLE_RETRY: 3
-          BUNDLE_PATH: vendor/bundle
-          DATABASE_URL: postgres://postgres:password@localhost:5432/swimming_pools_test
-          RAILS_ENV: test
-          REDIS_URL: redis://127.0.0.1:6379
-      - image: circleci/postgres:11-alpine
-      - image: circleci/redis:3.2-alpine
+      - image: 'cimg/ruby:2.7.2-node'
     steps:
       - checkout
-
-      # Install dependencies for Ruby Gems
-      - restore_cache:
-          keys:
-            - my-app-bundle-v1-{{ checksum "Gemfile.lock" }}
-            - my-app-bundle-v1-
-
+      - ruby/install-deps
+      - node/install-packages:
+          pkg-manager: yarn
+  checking:
+    docker:
+      - image: 'cimg/ruby:2.7.2-node'
+    steps:
+      - checkout
+      - ruby/install-deps
+  test:
+    docker:
+      - image: 'cimg/ruby:2.7.2-node'
+      - environment:
+          POSTGRES_DB: rails_blog_test
+          POSTGRES_PASSWORD: ''
+          POSTGRES_USER: circleci-demo-ruby
+        image: 'circleci/postgres:9.5-alpine'
+    environment:
+      BUNDLE_JOBS: '3'
+      BUNDLE_RETRY: '3'
+      PGHOST: 127.0.0.1
+      PGPASSWORD: ''
+      PGUSER: circleci-demo-ruby
+      RAILS_ENV: test
+    parallelism: 3
+    steps:
+      - checkout
+      - ruby/install-deps
+      - node/install-packages:
+          pkg-manager: yarn
       - run:
-          name: Configure Bundler
-          command: |
-            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
-            source $BASH_ENV
-            gem install bundler
-
-      - run:
-          name: Bundle Install
-          command: bundle check || bundle install
-
-      - save_cache:
-          key: my-app-bundle-v1-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-      # precompile
-      - run: nvm install node
-      - run:
-          name: Precompile assets
-          command: NODE_ENV=test bundle exec rails webpacker:compile
-
-      # Preparing database
-      - run:
+          command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
           name: Wait for DB
-          command: dockerize -wait tcp://127.0.0.1:5432 -timeout 1m
-
       - run:
+          command: 'bundle exec rails db:create db:schema:load --trace'
           name: Database setup
-          command: bin/rails db:create db:schema:load --trace
-
-      # Run test suits
-      # - run:
-          # name: Run rubocop in parallel
-          # command: bundle exec rubocop --parallel --config .rubocop.yml
-
-      - run:
-          name: Run rspec in parallel
-          command: bundle exec rspec
-
-      # Save artifacts
-      - store_test_results:
-          path: /tmp/test-results
+      - run: bundle exec rspec
+orbs:
+  node: circleci/node@4.1.0
+  ruby: circleci/ruby@1.1.2
+version: 2.1
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - checking
+      - test:
+          requires:
+            - build
