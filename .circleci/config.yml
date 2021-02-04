@@ -1,18 +1,4 @@
 version: 2.1
-orbs:
-  heroku: circleci/heroku@1.2.5
-workflows:
-  heroku_deploy:
-    jobs:
-      - build
-      - heroku/deploy-via-git:
-          requires:
-            - build
-          post-steps:
-            - run: heroku run rake db:migrate
-          filters:
-            branches:
-              only: master
 jobs:
   build:
     working_directory: ~/my-app
