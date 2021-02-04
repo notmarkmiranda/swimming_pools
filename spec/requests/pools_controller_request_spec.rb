@@ -48,4 +48,51 @@ describe PoolsController, type: :request do
       end
     end
   end
+
+  describe "GET#edit" do
+    let(:pool) { create(:pool, user: user) }
+
+    subject(:get_edit) { get edit_pool_path(pool) }
+
+    it "has 200 status" do
+      get_edit
+
+      expect(response).to have_http_status(200)
+    end
+  end
+
+  describe "PUT#update" do
+    let(:pool) { create(:pool, user: user) }
+    let(:new_name) { pool.name.reverse }
+
+    subject(:put_update) { put pool_path(pool), params: { pool: attrs } }
+
+    describe "success" do
+      let(:attrs) { { name: new_name } }
+
+      it "has 302 status" do
+        put_update
+
+        expect(response).to have_http_status(302)
+      end
+
+      it "updates pool" do
+        expect { put_update }.to change { pool.reload; pool.name }
+      end
+    end
+
+    describe "failure" do
+      let(:attrs) { { name: "" } }
+
+      it "has 200 status" do
+        put_update
+
+        expect(response).to have_http_status(200)
+      end
+
+      it "does not update pool" do
+        expect { put_update }.not_to change { pool.reload; pool.name }
+      end
+    end
+  end
 end
