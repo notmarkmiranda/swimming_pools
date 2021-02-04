@@ -1,0 +1,14 @@
+<%= form_for @pool do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.label :associated_game %>
+  <%= f.text_field :associated_game %>
+  <%= f.label :date %>
+  <%= f.date_field :date %>
+  <%= f.label :multiple_entries %>
+  <%= f.label :multiple_entries, "Yes", :value => "Yes" %>
+  <%= f.radio_button :multiple_entries, true %>
+  <%= f.label :multiple_entries, "No", :value => "No" %>
+  <%= f.radio_button :multiple_entries, false, :checked => true %>
+  <%= f.submit "Create Pool!" %>
+<% end %>

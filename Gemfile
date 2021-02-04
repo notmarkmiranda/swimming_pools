@@ -19,6 +19,7 @@ group :development, :test do
   gem 'figaro'
   gem 'rspec-rails'
   gem 'faker'
+  gem 'capybara'
 end
 
 group :development do
@@ -28,6 +29,7 @@ group :development do
 end
 
 group :test do
+  gem 'launchy'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
 end
