@@ -8,8 +8,5 @@ Rails.application.routes.draw do
     end
   end
 
-  # get "/memberships", to: "memberships#index"
-  # post "/memberships", to: "memberships#create"
-  # delete "/membership/:id", to: "memberships#destroy"
   resources :memberships, only: [:index, :create, :destroy]
 end
