@@ -31,6 +31,13 @@ class PoolsController < ApplicationController
     end
   end
 
+  def membership
+    @pool = Pool.find(params[:id])
+    @membership = current_user.memberships.new(pool_id: @pool.id)
+  end
+
+
+
   private
 
   def pool_params

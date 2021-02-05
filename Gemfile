@@ -12,6 +12,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'devise'
+gem 'pundit'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -20,6 +21,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'faker'
   gem 'capybara'
+  gem 'pry'
 end
 
 group :development do
