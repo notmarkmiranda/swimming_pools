@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_05_030950) do
+ActiveRecord::Schema.define(version: 2021_02_05_163201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "choices", force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.string "text"
+    t.boolean "correct"
+    t.integer "points"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["question_id"], name: "index_choices_on_question_id"
+  end
 
   create_table "memberships", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -60,6 +70,7 @@ ActiveRecord::Schema.define(version: 2021_02_05_030950) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "choices", "questions"
   add_foreign_key "memberships", "pools"
   add_foreign_key "memberships", "users"
   add_foreign_key "pools", "users"
