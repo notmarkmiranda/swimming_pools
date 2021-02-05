@@ -1,0 +1,7 @@
+<%= form_for @membership do |f| %>
+  <%= f.hidden_field :pool_id, value: params[:id] %>
+  <%= f.label :invite_code %>
+  <%= f.text_field :invite_code %>
+
+  <%= f.submit "Join Pool!" %>
+<% end %>

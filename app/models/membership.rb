@@ -4,4 +4,6 @@ class Membership < ApplicationRecord
   belongs_to :pool
 
   enum role: { member: 0, admin: 1 }
+
+  attr_accessor :invite_code
 end

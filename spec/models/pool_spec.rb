@@ -10,5 +10,22 @@ describe Pool, type: :model do
 
   describe "relationships" do
     it { should belong_to :user }
+    it { should have_many :memberships }
+  end
+
+  describe "methods" do
+    describe "callbacks" do
+      describe "#create_invite_code" do
+        let(:pool) { build(:pool) }
+
+        it "adds a unique invite code" do
+          expect(pool.invite_code).to be_nil
+
+          pool.save!; pool.reload
+
+          expect(pool.invite_code).not_to be_nil
+        end
+      end
+    end
   end
 end

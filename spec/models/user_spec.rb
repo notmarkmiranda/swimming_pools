@@ -7,5 +7,6 @@ describe User, type: :model do
 
   describe "relationships" do
     it { should have_many :pools }
+    it { should have_many :memberships }
   end
 end

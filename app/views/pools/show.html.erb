@@ -1,3 +1,10 @@
 <%= @pool.name %>
 
 Create entries
+
+<% if policy(@pool).admin? %>
+  <% @pool.memberships.each do |membership| %>
+    <%= membership.user.email %>
+    <%= button_to "Remove User", membership, method: :delete %>
+  <% end %>
+<% end %>
