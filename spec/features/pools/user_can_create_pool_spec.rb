@@ -19,7 +19,7 @@ describe 'User can create pool', type: :feature do
       click_button("Create Pool!")
 
       expect(page).to have_content(pool_name)
-      expect(page).to have_content("Create entries")
+      expect(page).to have_content("Create questions")
     end
   end
 end

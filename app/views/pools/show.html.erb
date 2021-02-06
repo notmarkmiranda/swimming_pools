@@ -1,10 +1,33 @@
 <%= @pool.name %>
 
-Create entries
-
 <% if policy(@pool).admin? %>
   <% @pool.memberships.each do |membership| %>
     <%= membership.user.email %>
     <%= button_to "Remove User", membership, method: :delete %>
+  <% end %>
+
+  <h2>Create questions</h2>
+  <%= form_for @question do |f| %>
+    <%= f.hidden_field :pool_id, value: @pool.id %>
+    <%= f.label :text, "Question text" %>
+    <%= f.text_field :text %>
+    <%= f.fields_for :choices do |ff| %>
+      <%= ff.label :text, "Choice text" %>
+      <%= ff.text_field :text %>
+    <% end %>
+
+    <%= f.submit "Create Question!" %>
+  <% end %>
+  <h3>Existing questions</h3>
+  <% @questions.each do |question| %>
+    <ul>
+      <li><%= question.text %></li>
+      <ul>
+        <% question.choices.each do |choice| %>
+          <li><%= choice.text %></li>
+        <% end %>
+      </ul>
+    </ul>
+    
   <% end %>
 <% end %>

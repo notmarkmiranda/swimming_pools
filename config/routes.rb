@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   end
 
   resources :memberships, only: [:index, :create, :destroy]
+  resources :questions, only: [:index, :create]
 end

@@ -8,4 +8,8 @@ class User < ApplicationRecord
 
   has_many :pools
   has_many :memberships
+
+  def is_admin?(pool)
+    memberships.where(pool: pool, role: 1) || pool.user == self
+  end
 end
