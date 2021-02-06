@@ -3,6 +3,9 @@ class PoolsController < ApplicationController
 
   def show
     @pool = current_user.pools.find(params[:id])
+    @questions = @pool.questions
+    @question = @pool.questions.new
+    2.times { @question.choices.build }
   end
 
   def new
