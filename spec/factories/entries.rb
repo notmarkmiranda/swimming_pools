@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :entry do
-    user { nil }
-    pool { nil }
+    user
+    pool
   end
 end
