@@ -8,7 +8,7 @@ class QuestionsController < ApplicationController
     redirect_to pool
   end
 
-  private 
+  private
 
   def question_params
     params.require(:question).permit(:text, :pool_id, choices_attributes: [:text, :points])

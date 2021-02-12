@@ -1,0 +1,16 @@
+<%= "Status: #{@entry.status}" %>
+<h2>Add picks</h2>
+
+<%= form_with model: [@pool, @entry] do |f| %>
+    <% @questions.each do |question| %>
+      <h3><%= question.text %></h3>
+        <% question.choices.each do |choice| %>
+          <%= f.fields_for @entry.picks.new, index: question.id do |ff| %>
+            <%= ff.radio_button :choice_id, choice.id, checked: @entry.pick_exists?(choice) %>
+            <%= ff.label :choice_id, choice.text %>
+          <% end %>
+        <% end %>
+    <% end %>
+  <%= f.submit "Save Entry!" %>
+
+<% end %>
