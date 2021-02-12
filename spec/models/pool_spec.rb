@@ -12,6 +12,7 @@ describe Pool, type: :model do
     it { should belong_to :user }
     it { should have_many :memberships }
     it { should have_many :questions }
+    it { should have_many :entries }
   end
 
   describe "methods" do

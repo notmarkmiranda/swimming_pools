@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: "pages#root"
 
   resources :pools do
+    resources :entries, only: [:create, :show, :update]
     member do
       get "/membership", to: "pools#membership"
     end
@@ -10,4 +11,5 @@ Rails.application.routes.draw do
 
   resources :memberships, only: [:index, :create, :destroy]
   resources :questions, only: [:index, :create]
+  resources :picks, only: [:index, :create]
 end

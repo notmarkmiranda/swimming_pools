@@ -1,5 +1,7 @@
 <%= @pool.name %>
 
+<%= button_to "Create New Entry!",  pool_entries_path(@pool) %>
+
 <% if policy(@pool).admin? %>
   <% @pool.memberships.each do |membership| %>
     <%= membership.user.email %>
@@ -28,6 +30,6 @@
         <% end %>
       </ul>
     </ul>
-    
+
   <% end %>
 <% end %>

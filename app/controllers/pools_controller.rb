@@ -2,7 +2,7 @@ class PoolsController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    @pool = current_user.pools.find(params[:id])
+    @pool = current_user.participating_pools.find(params[:id])
     @questions = @pool.questions
     @question = @pool.questions.new
     2.times { @question.choices.build }

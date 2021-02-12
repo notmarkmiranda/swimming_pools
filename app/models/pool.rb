@@ -1,8 +1,10 @@
 class Pool < ApplicationRecord
   validates :name, presence: true, uniqueness: { scope: :user_id }
+  
   belongs_to :user
   has_many :memberships
   has_many :questions
+  has_many :entries
 
   after_create_commit :add_invite_code
 
