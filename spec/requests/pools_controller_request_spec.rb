@@ -95,4 +95,41 @@ describe PoolsController, type: :request do
       end
     end
   end
+
+  describe "GET#membership"
+
+  describe "PUT#start" do
+    let(:pool) { create(:pool) }
+    let(:user) { pool.user }
+
+    before { sign_in(user) }
+
+    subject(:put_start) { put start_pool_path(pool) }
+
+    describe "if the pool has not been started" do
+      it "has 302 status" do
+        put_start
+
+        expect(response).to have_http_status(302)
+      end
+
+      it "should start the pool" do
+        expect { put_start }.to change { pool.reload; pool.started_at }
+      end
+    end
+
+    describe "if the pool has already been started" do
+      before { pool.update(started_at: DateTime.now) }
+
+      it "has 302 status" do
+        put_start
+
+        expect(response).to have_http_status(302)
+      end
+
+      it "does not change the started_at" do
+        expect { put_start }.not_to change { pool.reload; pool.started_at }
+      end
+    end
+  end
 end
