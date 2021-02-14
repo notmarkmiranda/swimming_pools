@@ -3,7 +3,7 @@ class PoolsController < ApplicationController
 
   def show
     @pool = current_user.participating_pools.find(params[:id])
-    @questions = @pool.questions
+    @questions = @pool.saved_questions
     @question = @pool.questions.new
     2.times { @question.choices.build }
   end
