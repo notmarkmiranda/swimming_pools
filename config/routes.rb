@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     resources :entries, only: [:create, :show, :update]
     member do
       get "/membership", to: "pools#membership"
+      put "/start", to: "pools#start"
     end
   end
 

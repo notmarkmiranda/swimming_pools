@@ -3,6 +3,7 @@
 <%= button_to "Create New Entry!",  pool_entries_path(@pool), disabled: @pool.started_at%>
 
 <% if policy(@pool).admin? %>
+  <%= button_to "Start pool", start_pool_path(@pool), method: :put, disabled: @pool.started_at %>
   <% @pool.memberships.each do |membership| %>
     <%= membership.user.email %>
     <%= button_to "Remove User", membership, method: :delete %>

@@ -1,8 +1,8 @@
 class PoolsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_pool, except: [:new, :create, :membership]
 
   def show
-    @pool = current_user.participating_pools.find(params[:id])
     @questions = @pool.saved_questions
     @question = @pool.questions.new
     2.times { @question.choices.build }
@@ -22,11 +22,9 @@ class PoolsController < ApplicationController
   end
 
   def edit
-    @pool = current_user.pools.find(params[:id])
   end
 
   def update
-    @pool = current_user.pools.find(params[:id])
     if @pool.update(pool_params)
       redirect_to @pool
     else
@@ -39,9 +37,16 @@ class PoolsController < ApplicationController
     @membership = current_user.memberships.new(pool_id: @pool.id)
   end
 
-
+  def start
+    @pool.update(started_at: DateTime.now) unless @pool.started_at
+    redirect_to @pool
+  end
 
   private
+
+  def set_pool
+    @pool = current_user.participating_pools.find(params[:id])
+  end
 
   def pool_params
     params.require(:pool).permit(:name, :associated_game, :date, :multiple_entries, :completed, :invite_code)
