@@ -235,6 +235,8 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    tailwindcss-rails (0.3.3)
+      rails (>= 6.0.0)
     thor (1.1.0)
     tilt (2.0.10)
     tzinfo (2.0.4)
@@ -284,6 +286,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   shoulda-matchers (~> 4.0)
   simplecov
+  tailwindcss-rails (~> 0.3.3)
   tzinfo-data
   web-console (>= 4.1.0)
   webpacker (~> 5.0)
@@ -292,4 +295,4 @@ RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   2.2.1
+   2.2.9
