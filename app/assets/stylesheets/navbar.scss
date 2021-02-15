@@ -1,0 +1,21 @@
+.brand {
+  span {
+    font-weight: bold;
+    color: black;
+   }
+  text-transform: uppercase;
+  color: red;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+div.nav-links > a.navbar-link {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  color: red;
+}
