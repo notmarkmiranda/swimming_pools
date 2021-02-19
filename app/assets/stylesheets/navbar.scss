@@ -1,0 +1,8 @@
+nav.navbar-light .navbar-brand {
+  text-transform: uppercase;
+  color: black;
+  & > span {
+    color: red;
+    font-weight: bold;
+   }
+}

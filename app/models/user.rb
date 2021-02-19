@@ -16,4 +16,8 @@ class User < ApplicationRecord
   def participating_pools
     Pool.left_outer_joins(:memberships).where("memberships.user_id = ? OR pools.user_id = ?", id, id)
   end
+
+  def membered_or_admined_pools
+    Pool.joins(:memberships).where("memberships.user_id = ?", id)
+  end
 end

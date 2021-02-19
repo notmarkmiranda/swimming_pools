@@ -16,6 +16,26 @@ describe Pool, type: :model do
   end
 
   describe "methods" do
+    describe "#entries_count" do
+      subject(:pool_entries_count) { pool.entries_count }
+
+      it "returns 0 entries" do
+        expect(pool_entries_count).to eq(0)
+      end
+
+      it "returns 1 entry" do
+        create(:entry, pool: pool)
+
+        expect(pool_entries_count).to eq(1)
+      end
+
+      it "returns 2 entries" do
+        create_list(:entry, 2, pool: pool)
+
+        expect(pool_entries_count).to eq(2)
+      end
+    end
+
     describe "#saved_questions" do
       let!(:saved_question) { create(:question, pool: pool) }
       let!(:unsaved_question) { build(:question, pool: pool) }

@@ -22,7 +22,7 @@ describe User, type: :model do
       let!(:admin_pool) { create(:membership, user: user, role: 1).pool }
       let!(:member_pool) { create(:membership, user: user, role: 0).pool }
       let!(:random_pool) { create(:pool) }
-      
+
       it "includes pools that the user owns" do
         expect(user_participating_pools).to include(owned_pool)
       end
@@ -37,6 +37,23 @@ describe User, type: :model do
 
       it "does not include pools that the user is not associated with" do
         expect(user_participating_pools).not_to include(random_pool)
+      end
+
+      describe "#membered_or_admined_pools" do
+        subject(:user_membered_or_admined_pools) { user.membered_or_admined_pools }
+
+        it "includes admin and membered pools" do
+          expect(user_membered_or_admined_pools).to include(admin_pool)
+          expect(user_membered_or_admined_pools).to include(member_pool)
+        end
+
+        it "does not include owned pool" do
+          expect(user_membered_or_admined_pools).not_to include(owned_pool)
+        end
+
+        it "does not include random pool" do
+          expect(user_membered_or_admined_pools).not_to include(random_pool)
+        end
       end
     end
   end
