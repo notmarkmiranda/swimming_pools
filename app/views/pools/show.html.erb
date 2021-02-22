@@ -1,41 +1,61 @@
-<%= @pool.name %>
+<div class="row">
+  <small class="text-muted">POOL NAME</small>
+  <h2><%= @pool.name.upcase %></h2>
+  <small class="text-muted"><% @pool.associated_game %></small>
+  <hr>
 
-<%= button_to "Create New Entry!",  pool_entries_path(@pool), disabled: @pool.started_at%>
+  <div class="pools-show__button-group">
+    <%= button_to "Create New Entry!", pool_entries_path(@pool), class: "btn btn-outline-secondary", disabled: @pool.started_at %>
 
-<% if policy(@pool).admin? %>
-  <%= button_to "Start pool", start_pool_path(@pool), method: :put, disabled: @pool.started_at %>
-  <% @pool.memberships.each do |membership| %>
-    <%= membership.user.email %>
-    <%= button_to "Remove User", membership, method: :delete %>
-  <% end %>
-
-  <% unless @pool.started_at %>
-    <h2>Create questions</h2>
-    <%= form_for @question do |f| %>
-      <%= f.hidden_field :pool_id, value: @pool.id %>
-      <%= f.label :text, "Question text" %>
-      <%= f.text_field :text %>
-      <%= f.fields_for :choices do |ff| %>
-        <%= ff.label :text, "Choice text" %>
-        <%= ff.text_field :text %>
+    <% if policy(@pool).admin? %>
+      <%= button_to "Start pool", start_pool_path(@pool), method: :put, class: "btn btn-outline-primary", disabled: @pool.started_at %>
+      <% @pool.memberships.each do |membership| %>
+        <%= membership.user.email %>
+        <%= button_to "Remove User", membership, method: :delete %>
+      <% end %>
+    <% end %>
+  </div>
+  <% if policy(@pool).admin? %>
+    <% if @pool.saved_questions.any? %>
+      <h3>Existing questions</h3>
+      <% @questions.each do |question| %>
+        <ul>
+          <li><%= question.text %></li>
+          <ul>
+            <% question.choices.each do |choice| %>
+              <li><%= choice.text %></li>
+            <% end %>
+          </ul>
+        </ul>
       <% end %>
 
-      <%= f.submit "Create Question!" %>
     <% end %>
-  <% end %>
+    <% unless @pool.started_at %>
+      <div class="row">
+        <div class="col-md-5">
+          <h2>Create questions</h2>
+          <%= form_for @question do |f| %>
+            <%= f.hidden_field :pool_id, value: @pool.id %>
+            <div class="mb-3">
+              <%= f.label :text, "Question text", class: "form-label" %>
+              <%= f.text_field :text, class: "form-control" %>
+            </div>
+            <div class="mb-3">
+            <h2>Question choices</h2>
+              <%= f.fields_for :choices do |ff| %>
+                <%= ff.label :text, "Choice text #{ff.index + 1}", class: "form-label" %>
+                <%= ff.text_field :text, class: "form-control" %>
+              <% end %>
+            </div>
 
-  <% if @pool.saved_questions.any? %>
-    <h3>Existing questions</h3>
-    <% @questions.each do |question| %>
-      <ul>
-        <li><%= question.text %></li>
-        <ul>
-          <% question.choices.each do |choice| %>
-            <li><%= choice.text %></li>
+            <div class="d-grid gap-2">
+              <%= f.submit "Create Question!", class: "btn btn-outline-dark" %>
+            </div>
           <% end %>
-        </ul>
-      </ul>
+        </div>
+      </div>
     <% end %>
 
+
   <% end %>
-<% end %>
+</div>

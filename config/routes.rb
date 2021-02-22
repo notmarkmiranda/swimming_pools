@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { sessions: 'sessions' }
   root to: "pages#root"
 
   resources :pools do
@@ -13,4 +13,6 @@ Rails.application.routes.draw do
   resources :memberships, only: [:index, :create, :destroy]
   resources :questions, only: [:index, :create]
   resources :picks, only: [:index, :create]
+
+  get "/dashboard", to: "dashboard#show", as: "dashboard"
 end

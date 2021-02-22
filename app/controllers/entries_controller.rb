@@ -13,8 +13,10 @@ class EntriesController < ApplicationController
     @pool = current_user.participating_pools.find(params[:pool_id])
     @entry = @pool.entries.new(user: current_user)
     if @entry.save
+      flash[:notice] = "New pool!"
       redirect_to pool_entry_path(@pool, @entry)
     else
+      flash[:alert] = @entry.errors.full_messages.join(", ")
       redirect_to pool_path(@pool)
     end
   end

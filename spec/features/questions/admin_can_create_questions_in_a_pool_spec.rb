@@ -4,9 +4,9 @@ describe "Admin can create questions in a pool", type: :feature do
   let(:pool) { create(:pool) }
   let(:user) { pool.user }
   let(:question_text) { "Who will win Superb Owl 55?" }
-  
+
   before { login_as(user, scope: :user) }
-  
+
   describe "can create a question without any choices" do
     it "creates a question and redirects back to pool path" do
       visit pool_path(pool)
@@ -31,22 +31,22 @@ describe "Admin can create questions in a pool", type: :feature do
         fill_in "question_choices_attributes_0_text", with: choice_one
         fill_in "question_choices_attributes_1_text", with: choice_two
         click_button "Create Question!"
-        
+
         expect(page).to have_content(question_text)
         expect(page).to have_content(choice_one)
         expect(page).to have_content(choice_two)
       end
     end
-    
+
     describe "cannot create a question with 1 choice" do
       it "does not create a question or chocies and redirects back to pool path" do
         visit pool_path(pool)
-        
+
         fill_in "Question text", with: question_text
         fill_in "question_choices_attributes_0_text", with: choice_one
         click_button "Create Question!"
 
-        expect(page).to have_content(pool.name)
+        expect(page.body.downcase).to have_content(pool.name.downcase)
         expect(page).not_to have_content(question_text)
         expect(page).not_to have_content(choice_one)
       end

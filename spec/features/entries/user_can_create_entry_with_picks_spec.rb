@@ -32,7 +32,7 @@ describe "User can create entry_with_picks", type: :feature do
       click_button "Create New Entry!"
 
       expect(current_path).to eq(pool_path(pool))
-      expect(page).to have_content(pool.name)
+      expect(page.body.downcase).to have_content(pool.name.downcase)
       expect(page).not_to have_content("Add picks")
     end
   end

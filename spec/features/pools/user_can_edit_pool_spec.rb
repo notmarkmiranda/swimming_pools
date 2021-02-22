@@ -16,8 +16,8 @@ describe "User can edit pool spec", type: :feature do
       fill_in "Name", with: new_name
       click_button "Update Pool!"
 
-      expect(page).to have_content(new_name)
-      expect(page).not_to have_content(original_name)
+      expect(page.body.downcase).to have_content(new_name.downcase)
+      expect(page.body.downcase).not_to have_content(original_name.downcase)
     end
   end
 

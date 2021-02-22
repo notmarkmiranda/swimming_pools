@@ -1,0 +1,25 @@
+<div class="dashboard">
+  <h2>Dashboard</h2>
+  <div class="row">
+    <div class="col-md-6">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Entries</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @pools.each do |pool| %>
+            <tr>
+              <td><%= link_to pool.name, pool %></td>
+              <td><%= pool.status %></td>
+              <td><%= pool.entries_count %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

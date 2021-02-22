@@ -8,6 +8,10 @@ class Pool < ApplicationRecord
 
   after_create_commit :add_invite_code
 
+  def entries_count
+    entries.count
+  end
+
   def saved_questions
     questions.where.not(id: nil)
   end
