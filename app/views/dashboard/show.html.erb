@@ -13,7 +13,7 @@
         <tbody>
           <% @pools.each do |pool| %>
             <tr>
-              <td><%= pool.name %></td>
+              <td><%= link_to pool.name, pool %></td>
               <td><%= pool.status %></td>
               <td><%= pool.entries_count %></td>
             </tr>

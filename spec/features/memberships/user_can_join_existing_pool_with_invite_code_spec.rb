@@ -12,7 +12,7 @@ describe "User can join existing pool with invite code", type: :feature do
     click_button "Join Pool!"
 
     expect(current_path).to eq(pool_path(pool))
-    expect(page).to have_content(pool.name)
+    expect(page.body.downcase).to have_content(pool.name.downcase)
   end
 
   it "Does not add a user when the incorrect code is used" do

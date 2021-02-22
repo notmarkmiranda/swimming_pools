@@ -9,7 +9,7 @@ describe "Admin cannot add questions to a pool that has started_spec", type: :fe
   it "does not allow an admin to add questions" do
     visit pool_path(pool)
 
-    expect(page).to have_content(pool.name)
+    expect(page.body.downcase).to have_content(pool.name.downcase)
     expect(page).not_to have_content("Create questions")
     expect(page).not_to have_content("Question text")
   end
