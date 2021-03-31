@@ -13,4 +13,10 @@ Rails.application.routes.draw do
   resources :memberships, only: [:index, :create, :destroy]
   resources :questions, only: [:index, :create]
   resources :picks, only: [:index, :create]
+
+  namespace :api do
+    namespace :v1 do
+      get "/healthcheck", to: "healthcheck#show"
+    end
+  end
 end
