@@ -15,6 +15,8 @@ gem 'devise'
 gem 'draper'
 gem 'pundit'
 gem 'rack-cors'
+gem 'jwt'
+gem 'jsonapi-serializer'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
