@@ -83,12 +83,6 @@ GEM
     coderay (1.1.3)
     concurrent-ruby (1.1.8)
     crass (1.0.6)
-    devise (4.7.3)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0)
-      responders
-      warden (~> 1.2.3)
     diff-lcs (1.4.4)
     docile (1.3.5)
     draper (4.0.1)
@@ -114,6 +108,9 @@ GEM
       concurrent-ruby (~> 1.0)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
+    jsonapi-serializer (2.2.0)
+      activesupport (>= 4.2)
+    jwt (2.2.2)
     launchy (2.5.0)
       addressable (~> 2.7)
     listen (3.4.1)
@@ -136,7 +133,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.11.2-x86_64-darwin)
       racc (~> 1.4)
-    orm_adapter (0.5.0)
     pg (1.2.3)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -189,9 +185,6 @@ GEM
     regexp_parser (2.0.3)
     request_store (1.5.0)
       rack (>= 1.4)
-    responders (3.0.1)
-      actionpack (>= 5.0)
-      railties (>= 5.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.1)
@@ -239,8 +232,6 @@ GEM
     tilt (2.0.10)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
-    warden (1.2.9)
-      rack (>= 2.0.9)
     web-console (4.1.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -263,15 +254,17 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
+  bcrypt (~> 3.1.7)
   bootsnap (>= 1.4.4)
   byebug
   capybara
-  devise
   draper
   factory_bot_rails
   faker
   figaro
   jbuilder (~> 2.7)
+  jsonapi-serializer
+  jwt
   launchy
   listen (~> 3.3)
   pg (~> 1.2.3)
