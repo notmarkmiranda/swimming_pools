@@ -38,20 +38,20 @@ describe Api::V1::UsersController, type: :request do
   end
 
   describe "POST#login" do
-  let(:user) { create(:user) }
-  subject(:post_login) { post "/api/v1/login", params: { email: user.email, password: "password" } }
+    let(:user) { create(:user) }
+    subject(:post_login) { post "/api/v1/login", params: { email: user.email, password: "password" } }
 
-  it "returns a JSON payload with user attributes" do
-    post_login
+    it "returns a JSON payload with user attributes" do
+      post_login
 
-    json_response = JSON.parse(response.body)
+      json_response = JSON.parse(response.body)
 
-    expect(json_response["data"].keys).to match_array(["id", "type", "attributes"])
-    expect(json_response["data"]["attributes"].keys).to match_array(["email", "first_name", "last_initial", "token"])
-  end
-    
+      expect(json_response["data"].keys).to match_array(["id", "type", "attributes"])
+      expect(json_response["data"]["attributes"].keys).to match_array(["email", "first_name", "last_initial", "token"])
+    end
   end
 
   describe "GET#auto_login"
+  # i'm not sure what this endpoint does
 
 end

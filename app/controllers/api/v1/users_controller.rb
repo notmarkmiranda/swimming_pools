@@ -3,7 +3,7 @@ class Api::V1::UsersController < Api::ApiController
 
   def create
     @user = User.new(user_params)
-    if @user.save?
+    if @user.save
       token = encode_token({ user_id: @user.id })
       render json: UserSerializer.new(@user, { params: { token: token } })
     else
@@ -14,16 +14,16 @@ class Api::V1::UsersController < Api::ApiController
   def login
     @user = User.find_by(email: params[:email])
 
-    if @user && @User.authenticate(params[:password])
-      token = encode_token({ user_id: user.id })
-      render json: { user: @user, token: token }
+    if @user && @user.authenticate(params[:password])
+      token = encode_token({ user_id: @user.id })
+      render json: UserSerializer.new(@user, { params: { token: token } })
     else
       render json: { error: "Invalid username or password" }
     end
   end
 
   def auto_login
-    render json: @user
+    render json: UserSerializer.new(@user)
   end
 
   private
