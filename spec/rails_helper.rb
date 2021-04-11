@@ -72,12 +72,6 @@ RSpec.configure do |config|
 
   # FactoryBot
   config.include FactoryBot::Syntax::Methods
-
-  # Devise - request spec
-  config.include Devise::Test::IntegrationHelpers, type: :request
-
-  # Devise - allows login_as in feature specs
-  config.include Warden::Test::Helpers
 end
 
 Shoulda::Matchers.configure do |config|

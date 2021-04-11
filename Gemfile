@@ -11,7 +11,7 @@ gem 'webpacker', '~> 5.0'
 gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.4', require: false
 
-gem 'devise'
+gem 'bcrypt', '~> 3.1.7'
 gem 'draper'
 gem 'pundit'
 gem 'rack-cors'

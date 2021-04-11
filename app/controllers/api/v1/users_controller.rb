@@ -2,14 +2,12 @@ class Api::V1::UsersController < Api::ApiController
   before_action :api_authorized, only: [:auto_login]
 
   def create
-    @user = User.create(user_params)
-    if @user.valid?
+    @user = User.new(user_params)
+    if @user.save?
       token = encode_token({ user_id: @user.id })
-      # require 'pry'; binding.pry
       render json: UserSerializer.new(@user, { params: { token: token } })
-      # render json: { user: @user, token: token }
     else
-      render json: { error: @user.errors.full_messages.join(", ") }
+      raise ActiveRecord::RecordInvalid.new(@user)
     end
   end
 
